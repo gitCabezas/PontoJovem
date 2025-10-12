@@ -13,12 +13,13 @@ export const getUsersById = async (req,res) => {
 
 export const createUser = async (req, res) => {
     try {
-        const { nome, email, password, senha_hash } = req.body;
+        const { nome, email, password, senha_hash,data_nascimento } = req.body;
         
         const userData = {
             nome,
             email,
-            password: password || senha_hash
+            password: password || senha_hash,
+            data_nascimento
         };
 
         const result = await createUserService(userData);

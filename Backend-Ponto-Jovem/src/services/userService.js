@@ -34,6 +34,7 @@ export const createUserService = async (userData) => {
             nome: userData.nome,
             email: userData.email,
             senha_hash: userData.password || userData.senha_hash,
+            data_nascimento: userData.data_nascimento
         };
 
         const { data, error } = await supabase
