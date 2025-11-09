@@ -1,8 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, SafeAreaView, StyleSheet } from 'react-native';
+import { View, Text, Pressable, SafeAreaView, StyleSheet, Alert } from 'react-native';
 import { validation } from '../utils/validation';
 import { auth } from '../utils/auth';
 import Field from '../components/Field';
+
+function maskDate(value) {
+  if (!value) return '';
+  const digits = value.replace(/\D/g, '').slice(0, 8);
+  if (digits.length <= 2) return digits;
+  if (digits.length <= 4) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+  return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
+}
+
+function formatToApi(dateStr) {
+  if (!dateStr) return '';
+  const [dd, mm, yyyy] = dateStr.split('/');
+  if (!(dd && mm && yyyy) || dd.length !== 2 || mm.length !== 2 || yyyy.length !== 4) return '';
+  return `${yyyy}-${mm.padStart(2, '0')}-${dd.padStart(2, '0')}`;
+}
 
 export default function RegisterScreen({ navigation }) {
   const [form, setForm] = useState({
@@ -19,7 +34,14 @@ export default function RegisterScreen({ navigation }) {
     const e = {};
     e.nome = validation.required(form.nome, 'Nome');
     e.email = validation.email(form.email);
-    e.data_nascimento = validation.required(form.data_nascimento, 'Data de nascimento');
+    const apiDate = formatToApi(form.data_nascimento);
+    if (!form.data_nascimento) {
+      e.data_nascimento = 'Data de nascimento é obrigatória';
+    } else if (!apiDate) {
+      e.data_nascimento = 'Data inválida (use DD/MM/AAAA)';
+    } else {
+      e.data_nascimento = validation.date(apiDate);
+    }
     e.senha = validation.password(form.senha);
     e.confirmPassword = validation.confirmPassword(form.senha, form.confirmPassword);
     return Object.fromEntries(Object.entries(e).filter(([_, v]) => v));
@@ -39,7 +61,7 @@ export default function RegisterScreen({ navigation }) {
         nome: form.nome.trim(),
         email: form.email.trim().toLowerCase(),
         senha: form.senha,
-        data_nascimento: form.data_nascimento.trim()
+        data_nascimento: formatToApi(form.data_nascimento.trim()), // envia no padrão da API
       });
       navigation.navigate('Login');
     } catch (e) {
@@ -49,7 +71,12 @@ export default function RegisterScreen({ navigation }) {
     }
   };
 
-  const onChange = (id) => (v) => setForm((s) => ({ ...s, [id]: v }));
+  const onChange = (id) => (v) => {
+    if (id === 'data_nascimento') {
+      return setForm((s) => ({ ...s, [id]: maskDate(v) }));
+    }
+    setForm((s) => ({ ...s, [id]: v }));
+  };
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -74,10 +101,10 @@ export default function RegisterScreen({ navigation }) {
         />
 
         <Field
-          label="Data de nascimento (DD-MM-AAAA)"
+          label="Data de nascimento (DD/MM/AAAA)"
           value={form.data_nascimento}
           onChangeText={onChange('data_nascimento')}
-          placeholder="07-08-2004"
+          placeholder="07/08/2004"
           error={errors.data_nascimento}
         />
 

@@ -24,10 +24,12 @@ export default function EditProfileScreen() {
 
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
-  const [dob, setDob] = useState("");
   const [identificacao, setIdentificacao] = useState(
     session?.id || session?.identificacao || ""
   );
+  const [dob, setDob] = useState(
+  session?.data_nascimento ? formatToInput(session.data_nascimento) : ''
+);
 
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(true);

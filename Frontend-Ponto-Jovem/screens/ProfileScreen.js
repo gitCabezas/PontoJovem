@@ -17,13 +17,14 @@ export default function ProfileScreen() {
     session?.user_metadata?.id_usuario;
 
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState({
-    nome: session?.username || 'Usuário',
-    email: session?.email || '-',
-    data_nascimento: session?.birthDate || '',
-    identificacao: session?.id || session?.identificacao || '-',
-    avatar: session?.avatar || null,
-  });
+const [user, setUser] = useState({
+  nome: session?.username || session?.nome || 'Usuário',
+  email: session?.email || '-',
+  data_nascimento: session?.data_nascimento || '',
+  identificacao: session?.id || session?.identificacao || '-',
+  avatar: session?.avatar || null,
+});
+
 
 
   useFocusEffect(
