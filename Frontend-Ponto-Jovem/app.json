@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "PontoJovem",
+    "slug": "snack-d49d78fc-a58c-4765-97c6-228cc0c2efc4",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.anonymous.snackd49d78fca58c476597c6228cc0c2efc4"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
